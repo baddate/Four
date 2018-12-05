@@ -5,7 +5,7 @@ var gl;
 ////////////
 var projectionMatrix, projectionMatrixLoc;
 var eye;
-var at;
+var at=vec3();
 const up = vec3(0.0, 1.0, 0.0);
 var near = 0.5;
 var far = 10.0;
@@ -17,10 +17,18 @@ var dr = 5.0 * Math.PI/180.0;
 var  fovy = 45.0;  // Field-of-view in Y direction angle (in degrees)
 var  aspect;       // Viewport aspect ratio
 
-var EyeZ=0.0;
-var EyeY=0.0;
+var distance=0;//移动的距离
+var tempx,tempy,tempz;
+var rad;//radius
+var angleLR=0;//左右偏转角度
+var angleTB=0;//上下偏转角度
+var alphaX=0;//与X轴的夹角
+var EyeZ=4.0;
+var EyeY=1.0;
 var EyeX=3.0;
-var atX=-0.7;
+var atX=0;
+var atY=0;
+var atZ=0;
 var alpha=0.0;
 //////////
 var numVertices  = 36;
@@ -428,7 +436,7 @@ window.onload = function init() {
     if (!gl) { alert("WebGL isn't available"); }
     aspect =  canvas.width/canvas.height;
     gl.viewport(0, 0, canvas.width, canvas.height);
-    gl.clearColor(1.0, 1.0, 1.0, 1.0);
+    gl.clearColor(1.0, 1.0, 0.0, 1.0);
 
     gl.enable(gl.DEPTH_TEST);
 
@@ -678,26 +686,55 @@ window.onload = function init() {
     document.getElementById("Scales").onclick = function() {
         AScale -= 0.2;
     };
+
+
+        tempx=EyeX-atX;//计算半径
+        tempy=EyeY-atY;
+        tempz=EyeZ-atZ;
+        rad=Math.pow(tempx,2)+Math.pow(tempy,2)+Math.pow(tempz,2);
+        rad=Math.sqrt(rad);
+        alphaX=Math.atan(Math.tan((atZ-EyeZ)/(atX-EyeX)));
     //keyboard listener
     document.onkeydown=function(e){
         var isie = (document.all) ? true:false;
         var key;
+
         if(isie){
             key = window.event.keyCode;
         }else{
             key = e.which;
         }
         if(key==37){//left
-            EyeZ+=0.2;
-        }
-        if(key==38){//top
-            EyeY+=0.2;
+            angleLR-=0.15;
+            at=transView(rad,alphaX,angleLR,atX,atY,atZ,1);
         }
         if(key==39){//right
-            EyeZ-=0.2;
+            angleLR+=0.15;
+            at=transView(rad,alphaX,angleLR,atX,atY,atZ,1);
+        }
+        if(key==38){//top
+            angleTB-=0.15;
+            at=transView(rad,alphaX,angleTB,atX,atY,atZ,-1);
         }
         if(key==40){//down
-            EyeY-=0.2;
+            angleTB+=0.15;
+            at=transView(rad,alphaX,angleTB,atX,atY,atZ,-1);
+        }
+        if(key==87){//w
+            distance+=0.2
+            moveIt(alphaX,angleLR,distance,1);
+        }
+        if(key==83){//s
+
+        }
+        if(key==65){//a
+
+        }
+        if(key==68){//d
+
+        }
+        if(key==32){//space
+
         }
     };
 
@@ -712,7 +749,7 @@ function render() {
 
 /////////////////
     alpha+=1*(Math.PI)/180;
-    if(alpha<Math.PI&&alpha>=0*Math.PI){
+/*    if(alpha<Math.PI&&alpha>=0*Math.PI){
         EyeX=1.5+Math.cos(alpha);
         EyeZ=Math.sin(alpha);
     }else if(alpha>=Math.PI&&alpha<3*Math.PI){
@@ -729,8 +766,9 @@ function render() {
         atX=0;
         EyeX=1.5+Math.cos(alpha);
         EyeZ=Math.sin(alpha);
-    }
-    at=vec3(atX,0.0,0.0);
+    }*/
+
+    //at=vec3(atX,atY,atZ);
     eye=vec3(EyeX,EyeY,EyeZ);
     //eye = vec3(radius*Math.sin(theta)*Math.cos(phi),
     //    radius*Math.sin(theta)*Math.sin(phi), radius*Math.cos(theta));
@@ -1087,4 +1125,23 @@ function render() {
     gl.uniformMatrix4fv( projectionMatrixLoc, false, flatten(projectionMatrix) );
     gl.drawElements(gl.TRIANGLES, numVertices,  gl.UNSIGNED_BYTE, 0);
     requestAnimFrame(render);
+}
+
+function transView(rad,alpha,theta,ax,ay,az,dir){//alpha 与x轴的夹角，theta转向的角度
+    if(dir==1){
+    ax=-rad*Math.cos(alpha+theta)+EyeX;
+    az=-rad*Math.sin(alpha+theta)+EyeZ;
+    }else if(dir==-1){
+    ax=-rad*Math.cos(alpha+theta)+EyeX;
+    ay=-rad*Math.sin(alpha+theta)+EyeY;
+    }
+    atX=ax;
+    atY=ay;
+    atZ=az;
+    return vec3(ax,ay,az);
+}
+function moveIt(alpha,theta,len,dir){
+    EyeX-=Math.sin(alpha+theta);
+    EyeZ-=Math.cos(alpha+theta);
+    rad-=len;
 }
