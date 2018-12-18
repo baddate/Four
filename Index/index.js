@@ -436,7 +436,7 @@ window.onload = function init() {
     if (!gl) { alert("WebGL isn't available"); }
     aspect =  canvas.width/canvas.height;
     gl.viewport(0, 0, canvas.width, canvas.height);
-    gl.clearColor(1.0, 1.0, 0.0, 1.0);
+    gl.clearColor(1.0, 1.0, 1.0, 1.0);
 
     gl.enable(gl.DEPTH_TEST);
 
@@ -705,24 +705,17 @@ window.onload = function init() {
             key = e.which;
         }
         if(key==37){//left
-            angleLR-=0.15;
-            at=transView(rad,alphaX,angleLR,atX,atY,atZ,1);
+
         }
         if(key==39){//right
-            angleLR+=0.15;
-            at=transView(rad,alphaX,angleLR,atX,atY,atZ,1);
+
         }
         if(key==38){//top
-            angleTB-=0.15;
-            at=transView(rad,alphaX,angleTB,atX,atY,atZ,-1);
         }
         if(key==40){//down
-            angleTB+=0.15;
-            at=transView(rad,alphaX,angleTB,atX,atY,atZ,-1);
         }
         if(key==87){//w
-            distance+=0.2
-            moveIt(alphaX,angleLR,distance,1);
+
         }
         if(key==83){//s
 
@@ -768,7 +761,7 @@ function render() {
         EyeZ=Math.sin(alpha);
     }*/
 
-    //at=vec3(atX,atY,atZ);
+    at=vec3(atX,atY,atZ);
     eye=vec3(EyeX,EyeY,EyeZ);
     //eye = vec3(radius*Math.sin(theta)*Math.cos(phi),
     //    radius*Math.sin(theta)*Math.sin(phi), radius*Math.cos(theta));
@@ -1125,23 +1118,4 @@ function render() {
     gl.uniformMatrix4fv( projectionMatrixLoc, false, flatten(projectionMatrix) );
     gl.drawElements(gl.TRIANGLES, numVertices,  gl.UNSIGNED_BYTE, 0);
     requestAnimFrame(render);
-}
-
-function transView(rad,alpha,theta,ax,ay,az,dir){//alpha 与x轴的夹角，theta转向的角度
-    if(dir==1){
-    ax=-rad*Math.cos(alpha+theta)+EyeX;
-    az=-rad*Math.sin(alpha+theta)+EyeZ;
-    }else if(dir==-1){
-    ax=-rad*Math.cos(alpha+theta)+EyeX;
-    ay=-rad*Math.sin(alpha+theta)+EyeY;
-    }
-    atX=ax;
-    atY=ay;
-    atZ=az;
-    return vec3(ax,ay,az);
-}
-function moveIt(alpha,theta,len,dir){
-    EyeX-=Math.sin(alpha+theta);
-    EyeZ-=Math.cos(alpha+theta);
-    rad-=len;
 }

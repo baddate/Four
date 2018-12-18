@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+
+<script id="vertex-shader" type="x-shader/x-vertex">
+
+attribute  vec4 vPosition;
+attribute  vec4 vColor;
+attribute  vec3 vNormal;
+varying vec4 fColor;
+
+uniform vec4 ambientProduct, diffuseProduct, specularProduct;
+uniform mat4 modelViewMatrix;
+uniform mat4 projectionMatrix;
+uniform vec4 lightPosition;
+uniform float shininess;
+
+attribute  vec2 vTexCoord;
+varying vec2 fTexCoord;
+void main()
+{
+    vec3 pos = -(modelViewMatrix * vPosition).xyz;
+
+    //fixed light postion
+
+    vec3 light = lightPosition.xyz;
+    vec3 L = normalize( light - pos );
+
+
+    vec3 E = normalize( -pos );
+    vec3 H = normalize( L + E );
+
+    vec4 NN = vec4(vNormal,0);
+
+    // Transform vertex normal into eye coordinates
+
+    vec3 N = normalize( (modelViewMatrix*NN).xyz);
+
+    // Compute terms in the illumination equation
+    vec4 ambient = ambientProduct;
+
+    float Kd = max( dot(L, N), 0.0 );
+    vec4  diffuse = Kd*diffuseProduct;
+
+    float Ks = pow( max(dot(N, H), 0.0), shininess );
+    vec4  specular = Ks * specularProduct;
+
+    if( dot(L, N) < 0.0 ) {
+	specular = vec4(0.0, 0.0, 0.0, 1.0);
+    }
+
+    gl_Position = projectionMatrix * modelViewMatrix * vPosition;
+    fColor = ambient + diffuse +specular;
+
+    fColor.a = 1.0;
+    fTexCoord = vTexCoord;
+}
+</script>
+
+<script id="fragment-shader" type="x-shader/x-fragment">
+
+precision mediump float;
+
+varying vec4 fColor;
+varying  vec2 fTexCoord;
+
+uniform sampler2D texture;
+void
+main()
+{
+    gl_FragColor = fColor * texture2D( texture, fTexCoord );
+}
+</script>
+
+<script type="text/javascript" src="../Common/webgl-utils.js"></script>
+<script type="text/javascript" src="../Common/initShaders.js"></script>
+<script type="text/javascript" src="../Common/MV.js"></script>
+<script type="text/javascript" src="cubeandtetra.js"></script>
+
+<body>
+<canvas id="gl-canvas" width="512"" height="512">
+Oops ... your browser doesn't support the HTML5 canvas element
+</canvas>
+<img id = "texImage" src = "logo1.jpg" hidden></img>
+<br/>
+
+<button id= "Cube1Left">Robot1 Left</button>
+<button id= "Cube1Right">Robot1 Right</button>
+<button id= "Cube1R1">Robot1 Anti Rotate </button>
+<button id= "Cube1R2">Robot1 Clock Rotate</button>
+<button id= "Scale1">left  Scale </button>
+<button id= "Scales1">left Scale sub</button>
+<br/>
+<button id= "CubeLeft">Robot2 Left</button>
+<button id= "CubeRight">Robot2 Right</button>
+<button id= "CubeR1">Robot2 Anti Rotate </button>
+<button id= "CubeR2">Robot2 Clock Rotate</button>
+<button id= "Scale">right Scale</button>
+<button id= "Scales">right Scale sub</button>
+<br/>
+<button id= "EyeX">EyeX</button>
+<button id= "EyeY">EyeY</button>
+<button id= "EyeZ">EyeZ</button>
+<button id= "EyeX1">EyeX1</button>
+<button id= "EyeY1">EyeY1</button>
+<button id= "EyeZ1">EyeZ1</button>
+</body>
+</html>

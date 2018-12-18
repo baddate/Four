@@ -40,6 +40,7 @@ uniform sampler2D texture0;
 uniform sampler2D texture1;//background
 uniform sampler2D texture2;//body
 uniform sampler2D texture3;//head
+uniform sampler2D texture4;//四肢
 uniform int bTexCoord;
 varying  vec2 fTexCoord;
 
@@ -49,14 +50,35 @@ main()
     if(bTexCoord==2)
           gl_FragColor = texture2D( texture2, fTexCoord );//body
     else if(bTexCoord==1)
-          gl_FragColor = texture2D( texture1, fTexCoord );//green
+          gl_FragColor = texture2D( texture1, fTexCoord );//background
+    else if(bTexCoord==3)
+          gl_FragColor = texture2D( texture3, fTexCoord );//head
+    else if(bTexCoord==4)
+          gl_FragColor = texture2D( texture4, fTexCoord );//四肢
     else
         gl_FragColor = texture2D( texture0, vec2(s, t));//球
 
 }
 </script>
 
-<p> </p>
+
+
+<script type="text/javascript" src="../Common/webgl-utils.js"></script>
+<script type="text/javascript" src="../Common/initShaders.js"></script>
+
+<script type="text/javascript" src="../Common/MV.js"></script>
+<script type="text/javascript" src="texSphereandtexCube.js"></script>
+
+<body>
+<canvas id="gl-canvas" width="1024" height="1024" style="border:2px solid #000000">
+Oops ... your browser doesn't support the HTML5 canvas element
+</canvas>
+<img id = "texImage" src = "fairy.jpg" hidden></img>
+<img id = "texImageBackGround" src = "background.jpg" hidden></img>
+<img id = "texImageBackGround2" src = "firefox.png" hidden></img>
+<img id = "texImageBackGround3" src = "chrome.png" hidden></img>
+<img id = "texImageBackGround4" src = "edge.png" hidden></img>
+<!-- <p> </p>
 <button id = "Button0">Increase R</button>
 <button id = "Button1">Decrease R</button>
 
@@ -68,21 +90,6 @@ main()
 <p> </p>
 <button id = "Button6">Increase Subdivisions</button>
 <button id = "Button7">Decrease Subdivisions</button>
-
-<p></p>
-
-<script type="text/javascript" src="../Common/webgl-utils.js"></script>
-<script type="text/javascript" src="../Common/initShaders.js"></script>
-
-<script type="text/javascript" src="../Common/MV.js"></script>
-<script type="text/javascript" src="texSphereandtexCube.js"></script>
-
-<body>
-<canvas id="gl-canvas" width="1024" height="1024">
-Oops ... your browser doesn't support the HTML5 canvas element
-</canvas>
-<img id = "texImage" src = "SA2011_black.gif" hidden></img>
-<img id = "texImageBackGround" src = "texImageBackGround.jpg" hidden></img>
-<img id = "texImageBackGround2" src = "cubetexture.png" hidden></img>
+<p></p> -->
 </body>
 </html>

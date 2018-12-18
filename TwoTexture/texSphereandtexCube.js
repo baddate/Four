@@ -11,6 +11,8 @@ var pointsArray = [];
 var texCoordsArray = [];
 var vTexCoord;
 var vTexCoord2;//body
+var vTexCoord3;//head
+var vTexCoord4;//四肢
 
 var near = -10;
 var far = 10;
@@ -34,44 +36,32 @@ var progrm;
 var ctm;
 
 var texCoord = [
-    vec2(0, 0),
-    vec2(0, 1),
+    vec2(1, 0),
     vec2(1, 1),
-    vec2(1, 0)
+    vec2(0, 1),
+    vec2(0, 0)
 ];
 
-////
-var vBody=[
-    vec4(-1, -1, 1, 1.0),
-    vec4(-1, 1, 1, 1.0),
-    vec4(1, 1, 1, 1.0),
-    vec4(1, -1, 1, 1.0),
-    vec4(-1, -1, -1, 1.0),
-    vec4(-1, 1, -1, 1.0),
-    vec4(1, 1, -1, 1.0),
-    vec4(1, -1, -1, 1.0)];
+////body
 function quad2(a, b, c, d) {
-    pointsArray.push(vBody[a]);
+    pointsArray.push(vertices[a]);
     texCoordsArray.push(texCoord[0]);
 
-    pointsArray.push(vBody[b]);
+    pointsArray.push(vertices[b]);
     texCoordsArray.push(texCoord[1]);
 
-    pointsArray.push(vBody[c]);
+    pointsArray.push(vertices[c]);
     texCoordsArray.push(texCoord[2]);
 
-    pointsArray.push(vBody[a]);
+    pointsArray.push(vertices[a]);
     texCoordsArray.push(texCoord[0]);
 
-    pointsArray.push(vBody[c]);
+    pointsArray.push(vertices[c]);
     texCoordsArray.push(texCoord[2]);
 
-    pointsArray.push(vBody[d]);
+    pointsArray.push(vertices[d]);
     texCoordsArray.push(texCoord[3]);
 }
-
-
-
 function texCube2() {
    quad2(1, 0, 3, 2);
    quad2(2, 3, 7, 6);
@@ -79,6 +69,65 @@ function texCube2() {
     quad2(6, 5, 1, 2);
     quad2(4, 5, 6, 7);
     quad2(5, 4, 0, 1);
+
+}
+////
+////head
+function quad3(a, b, c, d) {
+    pointsArray.push(vertices[a]);
+    texCoordsArray.push(texCoord[0]);
+
+    pointsArray.push(vertices[b]);
+    texCoordsArray.push(texCoord[1]);
+
+    pointsArray.push(vertices[c]);
+    texCoordsArray.push(texCoord[2]);
+
+    pointsArray.push(vertices[a]);
+    texCoordsArray.push(texCoord[0]);
+
+    pointsArray.push(vertices[c]);
+    texCoordsArray.push(texCoord[2]);
+
+    pointsArray.push(vertices[d]);
+    texCoordsArray.push(texCoord[3]);
+}
+function texCube3() {
+   quad3(1, 0, 3, 2);
+   quad3(2, 3, 7, 6);
+    quad3(3, 0, 4, 7);
+    quad3(6, 5, 1, 2);
+    quad3(4, 5, 6, 7);
+    quad3(5, 4, 0, 1);
+
+}
+////四肢
+function quad4(a, b, c, d) {
+    pointsArray.push(vertices[a]);
+    texCoordsArray.push(texCoord[0]);
+
+    pointsArray.push(vertices[b]);
+    texCoordsArray.push(texCoord[1]);
+
+    pointsArray.push(vertices[c]);
+    texCoordsArray.push(texCoord[2]);
+
+    pointsArray.push(vertices[a]);
+    texCoordsArray.push(texCoord[0]);
+
+    pointsArray.push(vertices[c]);
+    texCoordsArray.push(texCoord[2]);
+
+    pointsArray.push(vertices[d]);
+    texCoordsArray.push(texCoord[3]);
+}
+function texCube4() {
+   quad3(1, 0, 3, 2);
+   quad3(2, 3, 7, 6);
+    quad3(3, 0, 4, 7);
+    quad3(6, 5, 1, 2);
+    quad3(4, 5, 6, 7);
+    quad3(5, 4, 0, 1);
 
 }
 ////
@@ -172,6 +221,39 @@ function configureTexture2(image) {
 
     gl.uniform1i(gl.getUniformLocation(program, "texture2"), 2);
 }
+////////////head
+function configureTexture3(image) {
+    texture = gl.createTexture();
+    gl.activeTexture(gl.TEXTURE3);
+
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB,
+         gl.RGB, gl.UNSIGNED_BYTE, image);
+    gl.generateMipmap(gl.TEXTURE_2D);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER,
+                      gl.NEAREST_MIPMAP_LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+
+    gl.uniform1i(gl.getUniformLocation(program, "texture3"), 3);
+}
+//四肢
+function configureTexture4(image) {
+    texture = gl.createTexture();
+    gl.activeTexture(gl.TEXTURE4);
+
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB,
+         gl.RGB, gl.UNSIGNED_BYTE, image);
+    gl.generateMipmap(gl.TEXTURE_2D);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER,
+                      gl.NEAREST_MIPMAP_LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+
+    gl.uniform1i(gl.getUniformLocation(program, "texture4"), 4);
+}
+/////////
 
 var modelViewMatrix, projectionMatrix;
 var modelViewMatrixLoc, projectionMatrixLoc;
@@ -248,7 +330,10 @@ window.onload = function init() {
     tetrahedron(va, vb, vc, vd, numTimesToSubdivide);
     //body
     texCube2();
-
+    //head
+    texCube3();
+    //四肢
+    texCube4();
     var vBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, flatten(pointsArray), gl.STATIC_DRAW);
@@ -268,26 +353,64 @@ window.onload = function init() {
     gl.vertexAttribPointer(vTexCoord, 2, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(vTexCoord);
 
-    document.getElementById("Button0").onclick = function(){radius *= 2.0;};
-    document.getElementById("Button1").onclick = function(){radius *= 0.5;};
-    document.getElementById("Button2").onclick = function(){theta += dr;};
-    document.getElementById("Button3").onclick = function(){theta -= dr;};
-    document.getElementById("Button4").onclick = function(){phi += dr;};
-    document.getElementById("Button5").onclick = function(){phi -= dr;};
+    // document.getElementById("Button0").onclick = function(){radius *= 2.0;};
+    // document.getElementById("Button1").onclick = function(){radius *= 0.5;};
+    // document.getElementById("Button2").onclick = function(){theta += dr;};
+    // document.getElementById("Button3").onclick = function(){theta -= dr;};
+    // document.getElementById("Button4").onclick = function(){phi += dr;};
+    // document.getElementById("Button5").onclick = function(){phi -= dr;};
 
-    document.getElementById("Button6").onclick = function(){
-        numTimesToSubdivide++;
-        index = 0;
-        pointsArray = [];
-        init();
-    };
-    document.getElementById("Button7").onclick = function(){
-        if(numTimesToSubdivide) numTimesToSubdivide--;
-        index = 0;
-        pointsArray = [];
-        init();
-    };
+    // document.getElementById("Button6").onclick = function(){
+    //     numTimesToSubdivide++;
+    //     index = 0;
+    //     pointsArray = [];
+    //     init();
+    // };
+    // document.getElementById("Button7").onclick = function(){
+    //     if(numTimesToSubdivide) numTimesToSubdivide--;
+    //     index = 0;
+    //     pointsArray = [];
+    //     init();
+    // };
+    //keyboard listener
+    var temp=0;
+    document.onkeydown=function(e){
+        var isie = (document.all) ? true:false;
+        var key;
 
+        if(isie){
+            key = window.event.keyCode;
+        }else{
+            key = e.which;
+        }
+        if(key==37){//left
+            theta -= dr;
+        }
+        if(key==39){//right
+            theta += dr;
+        }
+        if(key==38){//top
+
+        }
+        if(key==40){//down
+
+        }
+        if(key==87){//w
+            phi -= dr;
+        }
+        if(key==83){//s
+            phi += dr;
+        }
+        if(key==65){//a
+            theta -= dr;
+        }
+        if(key==68){//d
+            theta += dr;
+        }
+        if(key==32){//space
+
+        }
+    };
     //球
     var image0 = document.getElementById("texImage");
 
@@ -300,8 +423,14 @@ window.onload = function init() {
     var image2 = document.getElementById("texImageBackGround2");
 
     configureTexture2(image2);
+    //head
+    var image3 = document.getElementById("texImageBackGround3");
 
+    configureTexture3(image3);
+    //四肢
+    var image4 = document.getElementById("texImageBackGround4");
 
+    configureTexture4(image4);
 
     render();
 }
@@ -320,9 +449,9 @@ function render() {
     projectionMatrix = ortho(left, right, bottom, ytop, near, far);
 
 
-    m = translate(0.0, -4.0, 0.0);
+    m = translate(-0.5, -4.0, 0.0);
     modelViewMatrix = mult(modelViewMatrix, m);
-    m = rotate(45, 1.0, 1.0, 0.0);
+    m = rotate(15, 1.0, 0.0, 0.0);
     modelViewMatrix = mult(modelViewMatrix, m);
     m = scalem(2.5, 2.5, 2.5);
     modelViewMatrix = mult(modelViewMatrix, m);
@@ -356,11 +485,110 @@ function render() {
 
     gl.drawArrays(gl.TRIANGLES, 0, numVertices);
 
+    //head
+    modelViewMatrix = lookAt(eye, at, up);
+    projectionMatrix = ortho(left, right, bottom, ytop, near, far);
+
+    m = translate(0.5, 0.8, 0.2);
+    modelViewMatrix = mult(modelViewMatrix, m);
+    m = rotate(15, 3.0, 1.0, 0.0);
+    modelViewMatrix = mult(modelViewMatrix, m);
+    m = scalem(0.3, 0.3, 0.3);
+    modelViewMatrix = mult(modelViewMatrix, m);
+
+    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
+    gl.uniformMatrix4fv(projectionMatrixLoc, false, flatten(projectionMatrix));
+
+    gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 3);
+    gl.activeTexture(gl.TEXTURE3);
+    gl.enableVertexAttribArray(vTexCoord3);
+
+    gl.drawArrays(gl.TRIANGLES, 0, numVertices);
+
+    //left arm
+    modelViewMatrix = lookAt(eye, at, up);
+    projectionMatrix = ortho(left, right, bottom, ytop, near, far);
+
+    m = translate(1.2, -0.4, -0.1);
+    modelViewMatrix = mult(modelViewMatrix, m);
+    m = rotate(15, 3.0, 1.0, 0.0);
+    modelViewMatrix = mult(modelViewMatrix, m);
+    m = scalem(0.2, 0.6, 0.2);
+    modelViewMatrix = mult(modelViewMatrix, m);
+
+    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
+    gl.uniformMatrix4fv(projectionMatrixLoc, false, flatten(projectionMatrix));
+
+    gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 4);
+    gl.activeTexture(gl.TEXTURE4);
+    gl.enableVertexAttribArray(vTexCoord4);
+
+    gl.drawArrays(gl.TRIANGLES, 0, numVertices);
+
+    //right arm
+    modelViewMatrix = lookAt(eye, at, up);
+    projectionMatrix = ortho(left, right, bottom, ytop, near, far);
+
+    m = translate(-0.2, -0.4, -0.1);
+    modelViewMatrix = mult(modelViewMatrix, m);
+    m = rotate(15, 3.0, 1.0, 0.0);
+    modelViewMatrix = mult(modelViewMatrix, m);
+    m = scalem(0.2, 0.6, 0.2);
+    modelViewMatrix = mult(modelViewMatrix, m);
+
+    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
+    gl.uniformMatrix4fv(projectionMatrixLoc, false, flatten(projectionMatrix));
+
+    gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 4);
+    gl.activeTexture(gl.TEXTURE4);
+    gl.enableVertexAttribArray(vTexCoord4);
+
+    gl.drawArrays(gl.TRIANGLES, 0, numVertices);
+
+    //right leg
+    modelViewMatrix = lookAt(eye, at, up);
+    projectionMatrix = ortho(left, right, bottom, ytop, near, far);
+
+    m = translate(0.75, -1.0, -0.1);
+    modelViewMatrix = mult(modelViewMatrix, m);
+    m = rotate(15, 3.0, 1.0, 0.0);
+    modelViewMatrix = mult(modelViewMatrix, m);
+    m = scalem(0.2, 0.7, 0.2);
+    modelViewMatrix = mult(modelViewMatrix, m);
+
+    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
+    gl.uniformMatrix4fv(projectionMatrixLoc, false, flatten(projectionMatrix));
+
+    gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 4);
+    gl.activeTexture(gl.TEXTURE4);
+    gl.enableVertexAttribArray(vTexCoord4);
+
+    gl.drawArrays(gl.TRIANGLES, 0, numVertices);
+
+    //left leg
+    modelViewMatrix = lookAt(eye, at, up);
+    projectionMatrix = ortho(left, right, bottom, ytop, near, far);
+
+    m = translate(0.25, -1.0, -0.1);
+    modelViewMatrix = mult(modelViewMatrix, m);
+    m = rotate(15, 3.0, 1.0, 0.0);
+    modelViewMatrix = mult(modelViewMatrix, m);
+    m = scalem(0.2, 0.7, 0.2);
+    modelViewMatrix = mult(modelViewMatrix, m);
+
+    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
+    gl.uniformMatrix4fv(projectionMatrixLoc, false, flatten(projectionMatrix));
+
+    gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 4);
+    gl.activeTexture(gl.TEXTURE4);
+    gl.enableVertexAttribArray(vTexCoord4);
+
+    gl.drawArrays(gl.TRIANGLES, 0, numVertices);
     //球
     modelViewMatrix = lookAt(eye, at, up);
     projectionMatrix = ortho(left, right, bottom, ytop, near, far);
 
-    m = translate(-1.0, 0.0, 0.0);
+    m = translate(-2.0, 0.0, 0.0);
     modelViewMatrix = mult(m, modelViewMatrix);
 
     gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
@@ -374,6 +602,26 @@ function render() {
     for( var i=0; i<index; i+=3)
         gl.drawArrays(gl.TRIANGLES, i + numVertices, 3);
 
+    //球shang
+    modelViewMatrix = lookAt(eye, at, up);
+    projectionMatrix = ortho(left, right, bottom, ytop, near, far);
+
+    m = translate(-2.0, 1.5, 0.0);
+    modelViewMatrix = mult(m, modelViewMatrix);
+    m = rotate(90, 0.0, 1.0, 0.0);
+    modelViewMatrix = mult(modelViewMatrix, m);
+    m = scalem(0.7, 0.7, 0.7);
+    modelViewMatrix = mult(modelViewMatrix, m);
+    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
+    gl.uniformMatrix4fv(projectionMatrixLoc, false, flatten(projectionMatrix));
+
+    gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 0);
+
+    gl.activeTexture(gl.TEXTURE1);
+    gl.disableVertexAttribArray(vTexCoord);
+
+    for( var i=0; i<index; i+=3)
+        gl.drawArrays(gl.TRIANGLES, i + numVertices, 3);
 
     window.requestAnimFrame(render);
 }
