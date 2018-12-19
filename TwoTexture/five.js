@@ -449,11 +449,11 @@ function render() {
     projectionMatrix = ortho(left, right, bottom, ytop, near, far);
 
 
-    m = translate(-0.5, -4.0, 0.0);
+    m = translate(-0.5, -2.0, 0.0);
     modelViewMatrix = mult(modelViewMatrix, m);
     m = rotate(15, 1.0, 0.0, 0.0);
     modelViewMatrix = mult(modelViewMatrix, m);
-    m = scalem(2.5, 2.5, 2.5);
+    m = scalem(2.5, 0.5, 2.5);
     modelViewMatrix = mult(modelViewMatrix, m);
 
     gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
