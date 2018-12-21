@@ -36,11 +36,11 @@ main()
 precision mediump float;
 
 varying float s, t;
-uniform sampler2D texture0;
-uniform sampler2D texture1;//background
-uniform sampler2D texture2;//body
-uniform sampler2D texture3;//head
-uniform sampler2D texture4;//四肢
+uniform sampler2D textureBall;
+uniform sampler2D textureBackground;//background
+uniform sampler2D textureBody;//body
+uniform sampler2D textureHead;//head
+uniform sampler2D textureArmAndLeg;//四肢
 uniform int bTexCoord;
 varying  vec2 fTexCoord;
 
@@ -48,15 +48,15 @@ void
 main()
 {
     if(bTexCoord==2)
-          gl_FragColor = texture2D( texture2, fTexCoord );//body
+          gl_FragColor = texture2D( textureBody, fTexCoord );//body
     else if(bTexCoord==1)
-          gl_FragColor = texture2D( texture1, fTexCoord );//background
+          gl_FragColor = texture2D( textureBackground, fTexCoord );//background
     else if(bTexCoord==3)
-          gl_FragColor = texture2D( texture3, fTexCoord );//head
+          gl_FragColor = texture2D( textureHead, fTexCoord );//head
     else if(bTexCoord==4)
-          gl_FragColor = texture2D( texture4, fTexCoord );//四肢
+          gl_FragColor = texture2D( textureArmAndLeg, fTexCoord );//四肢
     else
-        gl_FragColor = texture2D( texture0, vec2(s, t));//球
+        gl_FragColor = texture2D( textureBall, vec2(s, t));//球
 
 }
 </script>

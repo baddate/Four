@@ -10,9 +10,6 @@ var index = 0;
 var pointsArray = [];
 var texCoordsArray = [];
 var vTexCoord;
-var vTexCoord2;//body
-var vTexCoord3;//head
-var vTexCoord4;//四肢
 
 var near = -10;
 var far = 10;
@@ -43,91 +40,34 @@ var texCoord = [
 ];
 
 ////body
-function quad2(a, b, c, d) {
-    pointsArray.push(vertices[a]);
-    texCoordsArray.push(texCoord[0]);
-
-    pointsArray.push(vertices[b]);
-    texCoordsArray.push(texCoord[1]);
-
-    pointsArray.push(vertices[c]);
-    texCoordsArray.push(texCoord[2]);
-
-    pointsArray.push(vertices[a]);
-    texCoordsArray.push(texCoord[0]);
-
-    pointsArray.push(vertices[c]);
-    texCoordsArray.push(texCoord[2]);
-
-    pointsArray.push(vertices[d]);
-    texCoordsArray.push(texCoord[3]);
+function texBody() {
+   quad(1, 0, 3, 2);
+   quad(2, 3, 7, 6);
+    quad(3, 0, 4, 7);
+    quad(6, 5, 1, 2);
+    quad(4, 5, 6, 7);
+    quad(5, 4, 0, 1);
 }
-function texCube2() {
-   quad2(1, 0, 3, 2);
-   quad2(2, 3, 7, 6);
-    quad2(3, 0, 4, 7);
-    quad2(6, 5, 1, 2);
-    quad2(4, 5, 6, 7);
-    quad2(5, 4, 0, 1);
 
-}
-////
 ////head
-function quad3(a, b, c, d) {
-    pointsArray.push(vertices[a]);
-    texCoordsArray.push(texCoord[0]);
-
-    pointsArray.push(vertices[b]);
-    texCoordsArray.push(texCoord[1]);
-
-    pointsArray.push(vertices[c]);
-    texCoordsArray.push(texCoord[2]);
-
-    pointsArray.push(vertices[a]);
-    texCoordsArray.push(texCoord[0]);
-
-    pointsArray.push(vertices[c]);
-    texCoordsArray.push(texCoord[2]);
-
-    pointsArray.push(vertices[d]);
-    texCoordsArray.push(texCoord[3]);
-}
-function texCube3() {
-   quad3(1, 0, 3, 2);
-   quad3(2, 3, 7, 6);
-    quad3(3, 0, 4, 7);
-    quad3(6, 5, 1, 2);
-    quad3(4, 5, 6, 7);
-    quad3(5, 4, 0, 1);
+function texHead() {
+    quad(1, 0, 3, 2);
+    quad(2, 3, 7, 6);
+    quad(3, 0, 4, 7);
+    quad(6, 5, 1, 2);
+    quad(4, 5, 6, 7);
+    quad(5, 4, 0, 1);
 
 }
+
 ////四肢
-function quad4(a, b, c, d) {
-    pointsArray.push(vertices[a]);
-    texCoordsArray.push(texCoord[0]);
-
-    pointsArray.push(vertices[b]);
-    texCoordsArray.push(texCoord[1]);
-
-    pointsArray.push(vertices[c]);
-    texCoordsArray.push(texCoord[2]);
-
-    pointsArray.push(vertices[a]);
-    texCoordsArray.push(texCoord[0]);
-
-    pointsArray.push(vertices[c]);
-    texCoordsArray.push(texCoord[2]);
-
-    pointsArray.push(vertices[d]);
-    texCoordsArray.push(texCoord[3]);
-}
-function texCube4() {
-   quad3(1, 0, 3, 2);
-   quad3(2, 3, 7, 6);
-    quad3(3, 0, 4, 7);
-    quad3(6, 5, 1, 2);
-    quad3(4, 5, 6, 7);
-    quad3(5, 4, 0, 1);
+function texArmAndLeg() {
+    quad(1, 0, 3, 2);
+    quad(2, 3, 7, 6);
+    quad(3, 0, 4, 7);
+    quad(6, 5, 1, 2);
+    quad(4, 5, 6, 7);
+    quad(5, 4, 0, 1);
 
 }
 ////
@@ -164,7 +104,7 @@ function quad(a, b, c, d) {
 
 
 
-function texCube() {
+function texBackground() {
    quad(1, 0, 3, 2);
    quad(2, 3, 7, 6);
     quad(3, 0, 4, 7);
@@ -187,7 +127,7 @@ function configureTexture0( image ) {//球
                       gl.NEAREST_MIPMAP_LINEAR );
     gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST );
 
-    gl.uniform1i(gl.getUniformLocation(program, "texture0"), 0);
+    gl.uniform1i(gl.getUniformLocation(program, "textureBall"), 0);
 }
 
 function configureTexture1(image) {
@@ -203,7 +143,7 @@ function configureTexture1(image) {
                       gl.NEAREST_MIPMAP_LINEAR);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 
-    gl.uniform1i(gl.getUniformLocation(program, "texture1"), 1);
+    gl.uniform1i(gl.getUniformLocation(program, "textureBackground"), 1);
 }
 //////////////////////////////////////////////body test
 function configureTexture2(image) {
@@ -219,7 +159,7 @@ function configureTexture2(image) {
                       gl.NEAREST_MIPMAP_LINEAR);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 
-    gl.uniform1i(gl.getUniformLocation(program, "texture2"), 2);
+    gl.uniform1i(gl.getUniformLocation(program, "textureBody"), 2);
 }
 ////////////head
 function configureTexture3(image) {
@@ -235,7 +175,7 @@ function configureTexture3(image) {
                       gl.NEAREST_MIPMAP_LINEAR);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 
-    gl.uniform1i(gl.getUniformLocation(program, "texture3"), 3);
+    gl.uniform1i(gl.getUniformLocation(program, "textureHead"), 3);
 }
 //四肢
 function configureTexture4(image) {
@@ -251,7 +191,7 @@ function configureTexture4(image) {
                       gl.NEAREST_MIPMAP_LINEAR);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 
-    gl.uniform1i(gl.getUniformLocation(program, "texture4"), 4);
+    gl.uniform1i(gl.getUniformLocation(program, "textureArmAndLeg"), 4);
 }
 /////////
 
@@ -299,7 +239,7 @@ function divideTriangle(a, b, c, count) {
 }
 
 
-function tetrahedron(a, b, c, d, n) {
+function texBall(a, b, c, d, n) {
     divideTriangle(a, b, c, n);
     divideTriangle(d, c, b, n);
     divideTriangle(a, d, b, n);
@@ -325,15 +265,15 @@ window.onload = function init() {
     gl.useProgram( program );
 
 //先绘制cube
-    texCube();
+    texBackground();
 //后绘制球
-    tetrahedron(va, vb, vc, vd, numTimesToSubdivide);
+    texBall(va, vb, vc, vd, numTimesToSubdivide);
     //body
-    texCube2();
+    texBody();
     //head
-    texCube3();
+    texHead();
     //四肢
-    texCube4();
+    texArmAndLeg();
     var vBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, flatten(pointsArray), gl.STATIC_DRAW);
@@ -453,7 +393,7 @@ function render() {
     modelViewMatrix = mult(modelViewMatrix, m);
     m = rotate(15, 1.0, 0.0, 0.0);
     modelViewMatrix = mult(modelViewMatrix, m);
-    m = scalem(2.5, 0.5, 2.5);
+    m = scalem(3.5, 0.5, 3.5);
     modelViewMatrix = mult(modelViewMatrix, m);
 
     gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
@@ -481,7 +421,7 @@ function render() {
 
     gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 2);
     gl.activeTexture(gl.TEXTURE2);
-    gl.enableVertexAttribArray(vTexCoord2);
+    gl.enableVertexAttribArray(vTexCoord);
 
     gl.drawArrays(gl.TRIANGLES, 0, numVertices);
 
@@ -501,7 +441,7 @@ function render() {
 
     gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 3);
     gl.activeTexture(gl.TEXTURE3);
-    gl.enableVertexAttribArray(vTexCoord3);
+    gl.enableVertexAttribArray(vTexCoord);
 
     gl.drawArrays(gl.TRIANGLES, 0, numVertices);
 
@@ -521,7 +461,7 @@ function render() {
 
     gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 4);
     gl.activeTexture(gl.TEXTURE4);
-    gl.enableVertexAttribArray(vTexCoord4);
+    gl.enableVertexAttribArray(vTexCoord);
 
     gl.drawArrays(gl.TRIANGLES, 0, numVertices);
 
@@ -541,7 +481,7 @@ function render() {
 
     gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 4);
     gl.activeTexture(gl.TEXTURE4);
-    gl.enableVertexAttribArray(vTexCoord4);
+    gl.enableVertexAttribArray(vTexCoord);
 
     gl.drawArrays(gl.TRIANGLES, 0, numVertices);
 
@@ -561,7 +501,7 @@ function render() {
 
     gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 4);
     gl.activeTexture(gl.TEXTURE4);
-    gl.enableVertexAttribArray(vTexCoord4);
+    gl.enableVertexAttribArray(vTexCoord);
 
     gl.drawArrays(gl.TRIANGLES, 0, numVertices);
 
@@ -581,7 +521,7 @@ function render() {
 
     gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 4);
     gl.activeTexture(gl.TEXTURE4);
-    gl.enableVertexAttribArray(vTexCoord4);
+    gl.enableVertexAttribArray(vTexCoord);
 
     gl.drawArrays(gl.TRIANGLES, 0, numVertices);
     //球
